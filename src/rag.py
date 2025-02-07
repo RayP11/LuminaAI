@@ -1,0 +1,150 @@
+from langchain_community.vectorstores import Chroma
+from langchain_ollama import ChatOllama, OllamaEmbeddings
+from langchain.schema.output_parser import StrOutputParser
+from langchain_community.document_loaders import PyMuPDFLoader, TextLoader, CSVLoader, Docx2txtLoader, UnstructuredPowerPointLoader
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.schema.runnable import RunnablePassthrough
+from langchain.prompts import PromptTemplate
+from langchain.memory import ConversationBufferMemory
+from langchain_community.vectorstores.utils import filter_complex_metadata
+import os
+from dotenv import load_dotenv
+from contextlib import redirect_stdout, redirect_stderr
+import io
+
+load_dotenv()
+document_folder_path = os.getenv("DOCUMENT_FOLDER_PATH")  # Updated environment variable
+document_path = os.getenv("DOCUMENT_PATH")  # Updated environment variable
+
+if not document_folder_path or not document_path:
+    raise ValueError("DOCUMENT_FOLDER_PATH and DOCUMENT_PATH must be set in the .env file.")
+
+
+class ChatDocument:
+    def __init__(self):
+        self.model = ChatOllama(model="llama3.2")
+        self.text_splitter = CharacterTextSplitter(separator='\n', chunk_size=2000, chunk_overlap=200)
+        self.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+        self.embeddings = OllamaEmbeddings(model="nomic-embed-text")  # Use a single embedding model
+        self.vector_store = None
+        self.retriever = None
+        self.chain = None
+
+        self.prompt = PromptTemplate.from_template(
+            """
+            <s> [INST] 
+            You are Lumina AI. You are an AI RAG assistant meant for college students.
+            Your primary goal is to assist students with whatever they need regarding their documents.
+            Keep your responses brief but informative. Only answer what the user asks.
+            Use your chat history for a conversative experience that is user-friendly.
+            All of the attached files are my own files, which I've given to you.
+            [/INST] </s> 
+            [INST]
+            Chat History: {chat_history}
+            Question: {question} 
+            Context: {context} 
+            Answer: 
+            [/INST]
+            """
+        )
+
+    def _load_and_split_documents(self, file_path: str):
+        """Helper method to load and split documents based on file type."""
+        file_extension = file_path.split(".")[-1].lower()
+        
+        if file_extension == "pdf":
+            loader = PyMuPDFLoader(file_path)
+        elif file_extension == "txt":
+            loader = TextLoader(file_path)
+        elif file_extension == "csv":
+            loader = CSVLoader(file_path)
+        elif file_extension == "docx":
+            loader = Docx2txtLoader(file_path)
+        elif file_extension == "pptx":
+            loader = UnstructuredPowerPointLoader(file_path)
+        else:
+            raise ValueError(f"Unsupported file format: {file_extension}")
+
+        docs = loader.load()
+        chunks = self.text_splitter.split_documents(docs)
+        return filter_complex_metadata(chunks)
+
+
+    def load_documents(self):
+        """Load all documents from the specified folder."""
+        documents = []
+        print("Loading documents...")
+        for file in os.listdir(document_folder_path):
+            file_path = os.path.join(document_path, file)
+            if os.path.isfile(file_path):  # Check if it's a file
+                documents.extend(self._load_and_split_documents(file_path))
+                print(f"Loaded document: {file}")
+
+        if documents:
+            self.vector_store = Chroma.from_documents(documents=documents, embedding=self.embeddings)
+            self.retriever = self.vector_store.as_retriever(
+                search_type="similarity_score_threshold",
+                search_kwargs={
+                    "k": 100,
+                    "score_threshold": 0.45,
+                },
+            )
+            self.chain = (
+                {"context": self.retriever, "question": RunnablePassthrough(), "chat_history": self.memory.load_memory_variables}
+                | self.prompt
+                | self.model
+                | StrOutputParser()
+            )
+            print("Vector store and retriever initialized.")
+        else:
+            print("No documents found in the specified folder.")
+
+    def ingest(self, file_path: str):
+        """Ingest a single document."""
+        if not os.path.isfile(file_path):
+            raise ValueError("File path must point to a valid document.")
+
+        chunks = self._load_and_split_documents(file_path)
+        if self.vector_store:
+            # Append to existing vector store
+            self.vector_store.add_documents(chunks)
+        else:
+            # Create new vector store
+            self.vector_store = Chroma.from_documents(documents=chunks, embedding=self.embeddings)
+
+        self.retriever = self.vector_store.as_retriever(
+            search_type="similarity_score_threshold",
+            search_kwargs={
+                "k": 3,
+                "score_threshold": 0.5,
+            },
+        )
+
+        self.chain = (
+            {"context": self.retriever, "question": RunnablePassthrough(), "chat_history": self.memory.load_memory_variables}
+            | self.prompt
+            | self.model
+            | StrOutputParser()
+        )
+        print(f"Ingested document: {file_path}")
+
+    def ask(self, query: str):
+        """Ask a question based on the ingested documents."""
+        if not self.chain:
+            return "Please add a document first."
+
+        # Redirect stdout and stderr to suppress unwanted output
+        with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+            self.memory.chat_memory.add_user_message(query)
+            ai_response = self.chain.invoke(query)
+            self.memory.chat_memory.add_ai_message(ai_response)
+
+        return ai_response.strip()
+
+    def clear(self):
+        """Clear the current state."""
+        self.vector_store = None
+        self.retriever = None
+        self.chain = None
+        self.memory.clear()
+        print("State cleared.")
