@@ -13,15 +13,10 @@ from contextlib import redirect_stdout, redirect_stderr
 import io
 
 load_dotenv()
-document_folder_path = os.getenv("DOCUMENT_FOLDER_PATH")  # Updated environment variable
-document_path = os.getenv("DOCUMENT_PATH")  # Updated environment variable
-
-if not document_folder_path or not document_path:
-    raise ValueError("DOCUMENT_FOLDER_PATH and DOCUMENT_PATH must be set in the .env file.")
-
 
 class ChatDocument:
-    def __init__(self):
+    def __init__(self, uploads_dir):
+        self.uploads_dir = uploads_dir
         self.model = ChatOllama(model="llama3.2")
         self.text_splitter = CharacterTextSplitter(separator='\n', chunk_size=2000, chunk_overlap=200)
         self.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
@@ -68,36 +63,6 @@ class ChatDocument:
         docs = loader.load()
         chunks = self.text_splitter.split_documents(docs)
         return filter_complex_metadata(chunks)
-
-
-    def load_documents(self):
-        """Load all documents from the specified folder."""
-        documents = []
-        print("Loading documents...")
-        for file in os.listdir(document_folder_path):
-            file_path = os.path.join(document_path, file)
-            if os.path.isfile(file_path):  # Check if it's a file
-                documents.extend(self._load_and_split_documents(file_path))
-                print(f"Loaded document: {file}")
-
-        if documents:
-            self.vector_store = Chroma.from_documents(documents=documents, embedding=self.embeddings)
-            self.retriever = self.vector_store.as_retriever(
-                search_type="similarity_score_threshold",
-                search_kwargs={
-                    "k": 100,
-                    "score_threshold": 0.45,
-                },
-            )
-            self.chain = (
-                {"context": self.retriever, "question": RunnablePassthrough(), "chat_history": self.memory.load_memory_variables}
-                | self.prompt
-                | self.model
-                | StrOutputParser()
-            )
-            print("Vector store and retriever initialized.")
-        else:
-            print("No documents found in the specified folder.")
 
     def ingest(self, file_path: str):
         """Ingest a single document."""

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina AI - Document Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Lumina AI</h1>
+        <p class="subtitle">Your AI Document Assistant</p>
+
+        <!-- Document Upload Section -->
+        <div class="upload-section">
+            <input type="file" id="file-input" multiple>
+            <button id="upload-btn">Upload Document</button>
+        </div>
+
+        <!-- Chat Interface -->
+        <div class="chat-container">
+            <div id="chat-box"></div>
+            <div class="input-section">
+                <input type="text" id="user-input" placeholder="Ask me anything...">
+                <button id="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
