@@ -78,4 +78,4 @@ if __name__ == '__main__':
     Timer(1, open_browser).start()
     
     # Run the Flask app
-    app.run(debug=True)
+    app.run(debug=False)

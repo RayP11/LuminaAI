@@ -10,6 +10,7 @@ from langchain_community.vectorstores.utils import filter_complex_metadata
 import os
 from contextlib import redirect_stdout, redirect_stderr
 import io
+import shutil
 
 
 class ChatDocument:
@@ -22,6 +23,9 @@ class ChatDocument:
         self.vector_store = None
         self.retriever = None
         self.chain = None
+
+        # Initialize Chroma vector store
+        self._initialize_vector_store()
 
         self.prompt = PromptTemplate.from_template(
             """
@@ -39,6 +43,22 @@ class ChatDocument:
             Answer: 
             [/INST]
             """
+        )
+
+    def _initialize_vector_store(self):
+        """Initialize or reinitialize the Chroma vector store."""
+        # Clear existing vector store if it exists
+        if os.path.exists("chroma_db"):
+            shutil.rmtree("chroma_db")
+
+        # Create a new Chroma vector store
+        self.vector_store = Chroma(persist_directory="chroma_db", embedding_function=self.embeddings)
+        self.retriever = self.vector_store.as_retriever(
+            search_type="similarity_score_threshold",
+            search_kwargs={
+                "k": 100,
+                "score_threshold": 0.45,
+            },
         )
 
     def _load_and_split_documents(self, file_path: str):
@@ -73,7 +93,7 @@ class ChatDocument:
             self.vector_store.add_documents(chunks)
         else:
             # Create new vector store
-            self.vector_store = Chroma.from_documents(documents=chunks, embedding=self.embeddings)
+            self.vector_store = Chroma.from_documents(documents=chunks, embedding=self.embeddings, persist_directory="chroma_db")
 
         self.retriever = self.vector_store.as_retriever(
             search_type="similarity_score_threshold",
