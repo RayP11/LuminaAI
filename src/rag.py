@@ -8,11 +8,9 @@ from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 from langchain_community.vectorstores.utils import filter_complex_metadata
 import os
-from dotenv import load_dotenv
 from contextlib import redirect_stdout, redirect_stderr
 import io
 
-load_dotenv()
 
 class ChatDocument:
     def __init__(self, uploads_dir):

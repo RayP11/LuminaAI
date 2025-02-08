@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lumina AI - Document Assistant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Optional: Include Marked.js for advanced Markdown support -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -19,7 +21,14 @@
 
         <!-- Chat Interface -->
         <div class="chat-container">
-            <div id="chat-box"></div>
+            <div id="chat-box">
+                <!-- Example chat messages -->
+                <div class="message ai-message">
+                    <div class="ai-text">
+                        Hello! I'm Lumina AI, your document assistant. How can I help you today?
+                    </div>
+                </div>
+            </div>
             <div class="input-section">
                 <input type="text" id="user-input" placeholder="Ask me anything...">
                 <button id="send-btn">Send</button>

@@ -10,9 +10,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const messageElement = document.createElement('div');
         messageElement.classList.add('message');
         messageElement.classList.add(isUser ? 'user-message' : 'ai-message');
-        messageElement.textContent = message;
+
+        const textElement = document.createElement('div');
+        textElement.classList.add('ai-text');
+        textElement.innerHTML = formatResponse(message); // Format the AI's response
+
+        messageElement.appendChild(textElement);
         chatBox.appendChild(messageElement);
         chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Function to format the AI's response
+    function formatResponse(text) {
+        // Replace Markdown-like syntax with HTML
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Bold
+        text = text.replace(/\*(.*?)\*/g, '<em>$1</em>'); // Italic
+        text = text.replace(/`(.*?)`/g, '<code>$1</code>'); // Inline code
+        text = text.replace(/```([\s\S]*?)```/g, '<pre>$1</pre>'); // Code block
+        text = text.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>'); // Blockquote
+
+        // Preserve line breaks
+        text = text.replace(/\n/g, '<br>');
+
+        return text;
     }
 
     // Function to handle sending a message

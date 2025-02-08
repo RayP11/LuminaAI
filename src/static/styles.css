@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
@@ -31,6 +32,7 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* Upload Section */
 .upload-section {
     display: flex;
     justify-content: space-between;
@@ -58,6 +60,7 @@ h1 {
     background-color: #357abd;
 }
 
+/* Chat Container */
 .chat-container {
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -75,6 +78,65 @@ h1 {
     background-color: #fff;
 }
 
+/* Messages */
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.user-message {
+    background-color: #e1f5fe;
+    align-self: flex-end;
+}
+
+.ai-message {
+    background-color: #f1f1f1;
+    align-self: flex-start;
+}
+
+/* AI Text Formatting */
+.ai-text {
+    white-space: pre-wrap; /* Preserve line breaks and spaces */
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.ai-text strong {
+    font-weight: bold;
+}
+
+.ai-text em {
+    font-style: italic;
+}
+
+.ai-text code {
+    background-color: #f3f3f3;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: "Courier New", monospace;
+    font-size: 0.9em;
+}
+
+.ai-text pre {
+    margin: 0;
+    padding: 10px;
+    background-color: #282c34;
+    color: #abb2bf;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+.ai-text blockquote {
+    margin: 0;
+    padding: 10px 15px;
+    background-color: #e9e9e9;
+    border-left: 4px solid #ccc;
+    font-style: italic;
+    color: #555;
+}
+
+/* Input Section */
 .input-section {
     display: flex;
 }
@@ -98,20 +160,4 @@ h1 {
 
 #send-btn:hover {
     background-color: #357abd;
-}
-
-.message {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-.user-message {
-    background-color: #e1f5fe;
-    align-self: flex-end;
-}
-
-.ai-message {
-    background-color: #f1f1f1;
-    align-self: flex-start;
 }
