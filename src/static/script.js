@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const textElement = document.createElement('div');
         textElement.classList.add('ai-text');
-        textElement.innerHTML = formatResponse(message); // Format the AI's response
+        // Format the AI's response
+        textElement.innerHTML = formatResponse(message);
 
         messageElement.appendChild(textElement);
         chatBox.appendChild(messageElement);
@@ -22,16 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to format the AI's response
     function formatResponse(text) {
+        // Replace Markdown horizontal rules with an empty string
+        text = text.replace(/(^|\n)---($|\n)/g, '');  // Remove ---
+        text = text.replace(/(^|\n)\*\*\*($|\n)/g, '');  // Remove ***
+        text = text.replace(/(^|\n)___($|\n)/g, '');  // Remove ___
+    
         // Replace Markdown-like syntax with HTML
         text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Bold
         text = text.replace(/\*(.*?)\*/g, '<em>$1</em>'); // Italic
         text = text.replace(/`(.*?)`/g, '<code>$1</code>'); // Inline code
         text = text.replace(/```([\s\S]*?)```/g, '<pre>$1</pre>'); // Code block
         text = text.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>'); // Blockquote
-
+    
         // Preserve line breaks
         text = text.replace(/\n/g, '<br>');
-
+    
         return text;
     }
 

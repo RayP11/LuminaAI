@@ -1,4 +1,4 @@
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_ollama import ChatOllama, OllamaEmbeddings
 from langchain.schema.output_parser import StrOutputParser
 from langchain_community.document_loaders import PyMuPDFLoader, TextLoader, CSVLoader, Docx2txtLoader, UnstructuredPowerPointLoader
@@ -11,6 +11,11 @@ import os
 from contextlib import redirect_stdout, redirect_stderr
 import io
 import shutil
+import cv2
+import pytesseract
+from PIL import Image
+from moviepy import VideoFileClip
+import whisper
 
 
 class ChatDocument:
@@ -19,7 +24,7 @@ class ChatDocument:
         self.model = ChatOllama(model="llama3.2")
         self.text_splitter = CharacterTextSplitter(separator='\n', chunk_size=2000, chunk_overlap=200)
         self.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-        self.embeddings = OllamaEmbeddings(model="nomic-embed-text")  # Use a single embedding model
+        self.embeddings = OllamaEmbeddings(model="nomic-embed-text") 
         self.vector_store = None
         self.retriever = None
         self.chain = None
@@ -29,19 +34,15 @@ class ChatDocument:
 
         self.prompt = PromptTemplate.from_template(
             """
-            <s> [INST] 
-            You are Lumina AI. You are an AI RAG assistant meant for college students.
-            Your primary goal is to assist students with whatever they need regarding their documents.
+            You are Lumina AI. You are an AI RAG Model assistant meant for college students.
+            You will assist with analyzing documents, research, writing, coding, etc.
             Keep your responses brief but informative. Only answer what the user asks.
             Use your chat history for a conversative experience that is user-friendly.
             All of the attached files are my own files, which I've given to you.
-            [/INST] </s> 
-            [INST]
             Chat History: {chat_history}
             Question: {question} 
             Context: {context} 
             Answer: 
-            [/INST]
             """
         )
 
@@ -75,12 +76,72 @@ class ChatDocument:
             loader = Docx2txtLoader(file_path)
         elif file_extension == "pptx":
             loader = UnstructuredPowerPointLoader(file_path)
+        # extracts the text and audio of a video
+        elif file_extension in ["mp4", "avi", "mov"]:
+            text = self._analyze_video(file_path)
+            from langchain.schema import Document
+            docs = [Document(page_content=text)]
+            chunks = self.text_splitter.split_documents(docs)
+            return filter_complex_metadata(chunks)
         else:
             raise ValueError(f"Unsupported file format: {file_extension}")
 
         docs = loader.load()
         chunks = self.text_splitter.split_documents(docs)
         return filter_complex_metadata(chunks)
+    
+    def _extract_video_text(self, video_path: str, frame_interval: int=10):
+        """Extract text from video"""
+        cap = cv2.VideoCapture(video_path)
+        frame_count = 0
+        extracted_text = []
+
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                break
+
+            # Process every x frame
+            if frame_count % frame_interval == 0:
+                # Covert frame to PIL image
+                pil_image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+                # Extract any text displayed in the video
+                text = pytesseract.image_to_string(pil_image)
+                extracted_text.append(text)
+            frame_count += 1
+
+        cap.release()
+        return "\n".join(extracted_text)
+    
+    def _extract_video_audio(self, video_path, output_audio_path):
+        """Extract the audio data from a video"""
+        #get video audio
+        video = VideoFileClip(video_path)
+        audio = video.audio
+
+        #write audio data into a new audio file
+        audio.write_audiofile(output_audio_path, codec= 'pcm_s16le')
+
+        video.close()
+        audio.close()
+
+    def audio_to_text(self, audio_path):
+        """Utilize OpenAI Whisper model to transcribe audio data into text"""
+        model = whisper.load_model("small")
+        result = model.transcribe(audio_path)
+        return result["text"].strip() if result["text"] else "could not understand audio"
+    
+    def _analyze_video(self, video_path: str):
+        """Analyze video contents"""
+        #get the text from the video
+        frames_text = self._extract_video_text(video_path)
+        #get the audio from the video
+        self._extract_video_audio(video_path, "extracted_audio.wav")
+        audio_text = self.audio_to_text("extracted_audio.wav")
+        #combine audio and displayed text from video
+        analysis_result = f"Extracted Text from Frames:{frames_text} Extracted text from audio:{audio_text}"
+        return analysis_result
+        
 
     def ingest(self, file_path: str):
         """Ingest a single document."""

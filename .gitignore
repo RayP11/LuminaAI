@@ -3,3 +3,4 @@ src/.env
 documents
 src/__pycache__
 chroma_db
+extracted_audio.wav

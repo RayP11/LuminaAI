@@ -103,6 +103,10 @@ h1 {
 .ai-message {
     background-color: #f1f1f1;
     align-self: flex-start;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: none;
 }
 
 /* AI Text Formatting */
@@ -110,6 +114,7 @@ h1 {
     white-space: pre-wrap; /* Preserve line breaks and spaces */
     font-family: Arial, sans-serif;
     line-height: 1.6;
+    border: none;
 }
 
 .ai-text strong {
