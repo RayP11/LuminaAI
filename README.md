@@ -1,4 +1,4 @@
-![alt text](logo.png)
+![alt text](image.png)
 
 # Lumina AI
 - Bringing insight to your documents
