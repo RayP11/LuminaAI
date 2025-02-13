@@ -20,6 +20,9 @@ Lumina AI is a local, privacy-focused AI assistant designed specifically for hea
 - Created using Langchain - ollama - Chroma
 - Check requirements.txt for full library usage
 
+# Next Steps
+Optimization - The next step is to optimize a llama model through training it on various medical documents
+
 # Support
 For questions or feedback - Contact raypoulton11@yahoo.com
 
