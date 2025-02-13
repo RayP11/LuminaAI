@@ -24,7 +24,7 @@ Lumina AI is a local, privacy-focused AI assistant designed specifically for hea
 Optimization - The next step is to optimize a llama model through training it on various medical documents
 
 # Other Uses
-While this Software will be optimized for healthcare, it can easily be optimized for other industries or research such as:
+While this Software will be optimized for healthcare, it can currently be optimized for other industries or research such as:
 - education
 - businesses (business documents/information)
 - students (help with research and summarizing info)
