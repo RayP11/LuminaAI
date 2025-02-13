@@ -14,6 +14,8 @@ Lumina AI is a local, privacy-focused AI assistant designed specifically for hea
 - Knowledge Integration - Insights from the database AI agent are fed back into the system, optimizing the RAG model's knowledge base.
 - Simple User-Interface - Provides a simple user interface for easy usage.
 
+![alt text](<LuminaAI Test 2.gif>)
+
 # Libraries
 - Created using Langchain - ollama - Chroma
 - Check requirements.txt for full library usage
