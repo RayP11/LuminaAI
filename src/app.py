@@ -69,6 +69,27 @@ def clear():
     rag.clear()
     return jsonify({'success': True, 'message': 'Session cleared.'})
 
+@app.route('/agent_status', methods=['GET'])
+def agent_status():
+    status = "running" if rag.db_agent_thread and rag.db_agent_thread.is_alive() else "idle"
+    return jsonify({'status': status})
+
+@app.route('/agent_insights', methods=['GET'])
+def agent_insights():
+    insights = rag.document_summaries
+    cleaned_insights = {}
+
+    for doc_id, summary in insights.items():
+        # Extract the filename from the path
+        filename = os.path.basename(doc_id)
+        
+        # Clean up the summary text
+        cleaned_summary = summary.replace(doc_id, "")  # Remove the file path
+        cleaned_insights[filename] = cleaned_summary
+
+    #print(f"Returning cleaned insights: {cleaned_insights}")
+    return jsonify(cleaned_insights)
+
 # Function to open the browser
 def open_browser():
     webbrowser.open('http://127.0.0.1:5000/')
@@ -76,6 +97,8 @@ def open_browser():
 if __name__ == '__main__':
     # Open the browser after 1 second
     Timer(1, open_browser).start()
+
+    rag.start_agent_process()
     
     # Run the Flask app
     app.run(debug=False)

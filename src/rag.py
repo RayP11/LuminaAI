@@ -52,7 +52,8 @@ class ChatDocument:
 
             - Your responses should be short and easy to read, but informative.
             - Only provide imformation relevant to healthcare professionals looking at this document.
-            - Your responses regarding the documents should give the healthcare professionals information regarding further suggestions, grouping information together, and making information easiy accessed.
+            - Your responses regarding the documents should give the healthcare professionals information regarding further suggestions and making information easiy accessed.
+            - Keep in mind this is going to medical professionals with extensive knowledge in their field.
             Your responses will be dislayed on a user interface so keep them in strict format.
             Don't say phrases like "the document".
             YOUR RESPONSES SHOULD BE FORMATTED PROFESSIONALLY AND NOT ROBOTIC. KEEP THEM EXTREMELY BRIEF. EMPHASIS ON BRIEF.
@@ -335,7 +336,7 @@ class ChatDocument:
             chunk_summary = self.db_agent_chain.invoke({
                 "prompt": self.db_agent_instruct,
                 "chat_history": self.db_agent_memory.load_memory_variables({}),
-                "command": f"Summarize the following text in 1 sentence: {chunk}",
+                "command": f"Summarize the following text in 1-2 sentences: {chunk}",
             })
             chunk_summaries.append(chunk_summary)
 
@@ -344,7 +345,7 @@ class ChatDocument:
         final_summary = self.db_agent_chain.invoke({
             "prompt": self.db_agent_instruct,
             "chat_history": self.db_agent_memory.load_memory_variables({}),
-            "command": f"Summarize the following text in 1-2 sentences with your educated input: {aggregated_summary}",
+            "command": f"Summarize the following text in 3-4 sentences for the medical professional: {aggregated_summary}",
         })
         return final_summary
 

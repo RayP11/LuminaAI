@@ -11,7 +11,7 @@
     <div class="container">
         <!--Logo-->
         <div class="logo-container">
-            <img src="{{ url_for('static', filename='logo.png')}}" alt ="Lumina AI Logo" class="logo">
+            <img src="{{ url_for('static', filename='logo.png')}}" alt="Lumina AI Logo" class="logo">
         </div>
         <p class="subtitle">Your AI Document Assistant</p>
 
@@ -21,18 +21,29 @@
             <button id="upload-btn">Upload Document</button>
         </div>
 
-        <!-- Chat Interface -->
-        <div class="chat-container">
-            <div id="chat-box">
-                <div class="message ai-message">
-                    <div class="ai-text">
-                        Hello! I'm Lumina AI, your document assistant. How can I help you today?
+        <!-- Button to toggle between insights and chat -->
+        <button id="view-insights-btn">View Document Insights</button>
+
+        <!-- Document Insights Section (Initially Hidden) -->
+        <div id="insights-section" style="display: none;">
+            <h2>Document Insights</h2>
+            <ul id="insights-list"></ul>
+        </div>
+
+        <!-- Chat Interface Section -->
+        <div id="chat-section">
+            <div class="chat-container">
+                <div id="chat-box">
+                    <div class="message ai-message">
+                        <div class="ai-text">
+                            Hello! I'm Lumina AI, your document assistant. How can I help you today?
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="input-section">
-                <input type="text" id="user-input" placeholder="Ask me anything...">
-                <button id="send-btn">Send</button>
+                <div class="input-section">
+                    <input type="text" id="user-input" placeholder="Ask me anything...">
+                    <button id="send-btn">Send</button>
+                </div>
             </div>
         </div>
     </div>
