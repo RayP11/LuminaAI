@@ -56,7 +56,7 @@ class ChatDocument:
             - Keep in mind this is going to medical professionals with extensive knowledge in their field.
             Your responses will be dislayed on a user interface so keep them in strict format.
             Don't say phrases like "the document".
-            YOUR RESPONSES SHOULD BE FORMATTED PROFESSIONALLY AND NOT ROBOTIC. KEEP THEM EXTREMELY BRIEF. EMPHASIS ON BRIEF.
+            YOUR RESPONSES SHOULD BE FORMATTED PROFESSIONALLY AND NOT ROBOTIC. KEEP THEM BRIEF BUT INFORMATIVE.
         """
 
         # Initialize Chroma vector store
