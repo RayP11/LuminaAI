@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <!--Logo-->
+        <!-- Logo -->
         <div class="logo-container">
             <img src="{{ url_for('static', filename='logo.png')}}" alt="Lumina AI Logo" class="logo">
         </div>
@@ -26,8 +26,10 @@
 
         <!-- Document Insights Section (Initially Hidden) -->
         <div id="insights-section" style="display: none;">
-            <h2>Document Insights</h2>
-            <ul id="insights-list"></ul>
+            <h3>Document Insights</h3>
+            <div id="insights-container">
+                <ul id="insights-list"></ul>
+            </div>
         </div>
 
         <!-- Chat Interface Section -->
@@ -51,3 +53,4 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
+
