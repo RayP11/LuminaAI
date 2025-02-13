@@ -3,7 +3,7 @@
 # Lumina AI
 Lumina AI is a local, privacy-focused AI assistant designed specifically for healthcare professionals. It leverages a Retrieval-Augmented Generation (RAG) model powered by LLaMA (Large Language Model Meta AI) to provide intelligent, context-aware responses and insights based on user-submitted documents. Additionally, Lumina AI includes a database AI agent that analyzes, summarizes, and connects documents, making it an invaluable tool for doctors, physicians, therapists, and other healthcare professionals.
 
-<video controls src="LuminaAI Test.mp4" title="Title"></video>
+![alt text](<LuminaAI Test.gif>)
 
 # Features
 - Runs completely local - Lumina AI runs entirely on your local machine, ensuring data privacy and security for sensitive healthcare information.
