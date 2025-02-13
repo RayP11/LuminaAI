@@ -27,4 +27,5 @@ Optimization - The next step is to optimize a llama model through training it on
 For questions or feedback - Contact raypoulton11@yahoo.com
 
 # Acknowledgments
-Meta AI LLaMa llm model
+- Meta AI LLaMa llm model
+- LLaMa open source community
