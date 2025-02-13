@@ -57,10 +57,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ query }),
                 });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
                 const data = await response.json();
+                if (data.error) {
+                    throw new Error(data.error);
+                }
                 addMessage(data.response, false);
             } catch (error) {
-                addMessage('Error: Could not get a response from the server.', false);
+                addMessage(`Error: ${error.message}`, false);
             }
         }
     }
