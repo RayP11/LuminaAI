@@ -30,6 +30,7 @@ While this Software will be optimized for healthcare, it can easily be optimized
 - students (help with research and summarizing info)
 - engineering (taking in notes, diagrams, or blueprints)
 - programming (Utilize user-given documents to write code with context from entire files)
+- Speech (Translating entire documents into other languages)
 
 # Support
 For questions or feedback - Contact raypoulton11@yahoo.com
