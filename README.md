@@ -1,13 +1,14 @@
 ![alt text](image.png)
 
 # Lumina AI
-Lumina AI is a local, privacy-focused AI assistant designed specifically for healthcare professionals. It leverages a Retrieval-Augmented Generation (RAG) model powered by LLaMA (Large Language Model Meta AI) to provide intelligent, context-aware responses and insights based on user-submitted documents. Additionally, Lumina AI includes a database AI agent that analyzes, summarizes, and connects documents, making it an invaluable tool for doctors, physicians, therapists, and other healthcare professionals.
+Optimized for College Students
+Lumina AI is a local, privacy-focused AI assistant designed specifically for college students. It leverages a Retrieval-Augmented Generation (RAG) model powered by LLaMA (Large Language Model Meta AI) to provide intelligent, context-aware responses and insights based on user-submitted documents. Additionally, Lumina AI includes a database AI agent that analyzes, summarizes, and connects documents, making it an invaluable tool for research, summarization, projects, and other school work.
 
 ![alt text](<LuminaAI Test.gif>)
 
 # Features
-- Runs completely local - Lumina AI runs entirely on your local machine, ensuring data privacy and security for sensitive healthcare information.
-- Database AI Agent - Analyzes and connects documents, summarizes content, and provides actionable insights.
+- Runs completely local - Lumina AI runs entirely on your local machine, ensuring data privacy and security for all information.
+- Database AI Agent - Analyzes and connects documents, summarizes content, and provides insights.
 - Requires No Internet - No internet connection is needed due to the local functionality
 - Can access the following document types - .pptx .pdf .txt .csv .docx .mp4 .avi .mov
 - Document Summarization - Automatically generates concise summaries of lengthy documents, saving time.
@@ -21,11 +22,11 @@ Lumina AI is a local, privacy-focused AI assistant designed specifically for hea
 - Check requirements.txt for full library usage
 
 # Next Steps
-Optimization - The next step is to optimize a llama model through training it on various medical documents
+Optimization - The next step is to optimize a llama model through training it on various research documents
 
 # Other Uses
-While this Software will be optimized for healthcare, it can currently be optimized for other industries or research such as:
-- education
+While this Software will be optimized for students, it can easily be optimized for other industries or research such as:
+- education (teachers)
 - businesses (business documents/information)
 - students (help with research and summarizing info)
 - engineering (taking in notes, diagrams, or blueprints)

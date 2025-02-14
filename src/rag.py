@@ -48,12 +48,11 @@ class ChatDocument:
         self.document_chunks = {}
         self.db_agent_queue = Queue()
         self.db_agent_instruct = """
-            You are the database agent for Lumina AI, an advanced assistant for healthcare professionals. Your task is to analyze and summarize documents, identify connections between them, and provide actionable insights. Follow these steps:
-
+            You are the database agent for Lumina AI, an advanced assistant for college students. Your task is to analyze and summarize documents, identify connections between them, and provide insights. Follow these steps:
             - Your responses should be short and easy to read, but informative.
-            - Only provide imformation relevant to healthcare professionals looking at this document.
-            - Your responses regarding the documents should give the healthcare professionals information regarding further suggestions and making information easiy accessed.
-            - Keep in mind this is going to medical professionals with extensive knowledge in their field.
+            - Only provide imformation relevant to students looking at this document.
+            - Your responses regarding the documents should give the students informative and convenient information
+            - Keep in mind this is going to college students who are learning the topics being submitted to you.
             Your responses will be dislayed on a user interface so keep them in strict format.
             Don't say phrases like "the document".
             YOUR RESPONSES SHOULD BE FORMATTED PROFESSIONALLY AND NOT ROBOTIC. KEEP THEM BRIEF BUT INFORMATIVE.
@@ -64,9 +63,9 @@ class ChatDocument:
 
         self.prompt = PromptTemplate.from_template(
             """
-            You are Lumina AI. You are an AI RAG Model assistant meant for healthcare professionals.
-            You will assist with analyzing patient documents, keeping track of patients,
-            and helping the healthcare professionals evaluate their treatment plan and/or notes/work.
+            You are Lumina AI. You are an AI RAG Model assistant meant for college students.
+            You will assist with analyzing documents, carrying out tasks,
+            and helping the students evaluate notes/work.
             Keep your responses brief but informative. Only answer what the user asks.
             Use your chat history for a conversative experience that is user-friendly.
             Chat History: {chat_history}
@@ -231,7 +230,7 @@ class ChatDocument:
             search_type="similarity_score_threshold",
             search_kwargs={
                 "k": 100,
-                "score_threshold": 0.25,
+                "score_threshold": 0.3,
             },
         )
 
@@ -345,7 +344,7 @@ class ChatDocument:
         final_summary = self.db_agent_chain.invoke({
             "prompt": self.db_agent_instruct,
             "chat_history": self.db_agent_memory.load_memory_variables({}),
-            "command": f"Summarize the following text in 3-4 sentences for the medical professional: {aggregated_summary}",
+            "command": f"Summarize the following text in 3-4 sentences for the student: {aggregated_summary}",
         })
         return final_summary
 
