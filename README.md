@@ -4,7 +4,7 @@
 Optimized for College Students
 Lumina AI is a local, privacy-focused AI assistant designed specifically for college students. It leverages a Retrieval-Augmented Generation (RAG) model powered by LLaMA (Large Language Model Meta AI) to provide intelligent, context-aware responses and insights based on user-submitted documents. Additionally, Lumina AI includes a database AI agent that analyzes, summarizes, and connects documents, making it an invaluable tool for research, summarization, projects, and other school work.
 
-![alt text](<LuminaAI Test.gif>)
+![alt text](<Lumina Video 1.gif>)
 
 # Features
 - Runs completely local - Lumina AI runs entirely on your local machine, ensuring data privacy and security for all information.
@@ -15,7 +15,7 @@ Lumina AI is a local, privacy-focused AI assistant designed specifically for col
 - Knowledge Integration - Insights from the database AI agent are fed back into the system, optimizing the RAG model's knowledge base.
 - Simple User-Interface - Provides a simple user interface for easy usage.
 
-![alt text](<LuminaAI Test 2.gif>)
+![alt text](<Lumina Video Test 2.gif>)
 
 # Libraries
 - Created using Langchain - ollama - Chroma
